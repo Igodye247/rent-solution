@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)file:///C:/Users/Dell/Desktop/igodye/igodye_rentals.html#dashboard -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IGODYE RENTALS — Final Responsive (Filters + Mobile Menu + PDF)</title>
+<style>
+  :root{
+    --bg:#070607;
+    --muted:#9ca3af;
+    --gold:#b88f2a;
+    --accent:#0ea5a4;
+    --card-bg: rgba(255,255,255,0.02);
+    --max-width:1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#030303,var(--bg));color:#eee;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}
+  /* Top nav */
+  .topnav{width:100%;background:linear-gradient(180deg,#050505,#0b0b0b);border-bottom:1px solid rgba(255,255,255,0.03);position:sticky;top:0;z-index:60}
+  .topnav .inner{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo-square{width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--gold),#f0daa0);display:flex;align-items:center;justify-content:center;color:#0b0b0c;font-weight:800}
+  .top-actions{display:flex;gap:8px;align-items:center}
+  .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;color:var(--gold);cursor:pointer;font-weight:600}
+  .btn.primary{background:var(--gold);color:#0b0b0c;border:0}
+  .hamburger{display:none;font-size:20px;padding:6px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--gold)}
+  /* layout */
+  .wrap{max-width:var(--max-width);margin:14px auto;padding:12px;display:block}
+  .layout{display:grid;grid-template-columns:260px 1fr;gap:12px}
+  aside{background:linear-gradient(180deg,#071227,#07121a);padding:16px;border-radius:10px;color:var(--gold);height:calc(100vh - 120px);overflow:auto;position:sticky;top:66px}
+  nav button{display:block;width:100%;text-align:left;padding:10px;margin-bottom:6px;background:transparent;border:0;color:rgba(212,175,55,0.95);border-radius:8px;cursor:pointer;font-weight:600}
+  nav button.active{background:rgba(184,143,42,0.06);color:var(--gold)}
+  .aside-footer{margin-top:12px;color:var(--muted);font-size:13px}
+  main{min-height:60vh}
+  /* cards & dashboard */
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.55)}
+  .insights-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+  .insights{display:flex;gap:12px;margin-bottom:12px}
+  .insight{min-width:220px;flex:0 0 220px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));border:1px solid rgba(184,143,42,0.06);padding:12px;border-radius:10px}
+  .insight .title{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .insight .value{font-size:18px;font-weight:800;color:#fff}
+  .grid-2{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+  .recent-table{width:100%;border-collapse:collapse}
+  th,td{padding:8px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.03);font-size:14px;color:#fff}
+  th{color:var(--muted);font-weight:700}
+  input,select{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.01);color:#fff;width:100%}
+  .form-row{display:flex;gap:8px}
+  .form-row>*{flex:1}
+  .small{font-size:13px;color:var(--muted)}
+  /* modal */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center;z-index:1000;padding:10px}
+  .modal{width:820px;max-width:100%;background:#0b0b0b;border-radius:8px;padding:14px;color:var(--gold)}
+  .modal-body{max-height:70vh;overflow:auto;background:linear-gradient(180deg,#070707,#0b0b0b);padding:12px;border-radius:6px}
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+  .receipt-preview{border:2px solid rgba(184,143,42,0.22);padding:12px;border-radius:8px;background:linear-gradient(180deg,#070707,#0b0b0b);color:var(--gold)}
+  /* mobile */
+  @media (max-width:1000px){
+    .layout{grid-template-columns:1fr}
+    aside{position:fixed;left:-320px;top:66px;height:calc(100vh - 66px);width:300px;transition:left .28s ease;z-index:80}
+    aside.open{left:8px}
+    .hamburger{display:inline-block}
+    .top-actions{display:none}
+  }
+  @media (max-width:760px){
+    .insight{min-width:260px;flex:0 0 260px}
+  }
+  @media (max-width:480px){
+    .btn{padding:10px 14px;font-size:15px;border-radius:10px}
+  }
+  /* print */
+  @media print{
+    body *{visibility:hidden}
+    .printable, .printable *{visibility:visible}
+    .printable{position:fixed;left:0;top:0;width:100%;padding:20px;background:#fff;color:#000}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="topnav">
+  <div class="inner">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">☰</button>
+      <div class="brand">
+        <div class="logo-square">IG</div>
+        <div>
+          <div style="font-weight:800;color:var(--gold)">IGODYE RENTALS</div>
+          <div class="small" style="color:var(--muted)">Luxury Yearly Rent Management</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn" id="topExportBtn">Export CSV</button>
+      <button class="btn primary" id="topAddPaymentBtn">Add Payment</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="font-weight:800">IGODYE RENTALS</div>
+        <div class="small" style="margin-left:auto;color:var(--muted)">Luxury</div>
+      </div>
+
+      <nav id="nav">
+        <button data-view="dashboard" class="active">🏠 Dashboard</button>
+        <button data-view="properties">🏢 Store Rooms</button>
+        <button data-view="tenants">👥 Tenants</button>
+        <button data-view="payments">💳 Payments (Yearly)</button>
+        <button data-view="reports">📊 Reports</button>
+        <button data-view="settings">⚙️ Settings</button>
+        <button data-view="contact">✉️ Contact</button>
+      </nav>
+
+      <div class="aside-footer">
+        <div id="bizSummary">238 BLK "B" FADAMA WA-UPPER WEST REGION</div>
+        <div class="small" id="bizContact">0548484844 • igodye1995@gmail.com</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main>
+      <div id="appContent">
+    <div style="margin-bottom:12px">
+      <div class="insights-wrapper">
+        <div class="insights">
+          <div class="insight"><div class="title">Total Rent Collected</div><div class="value">GHS 2800</div></div>
+          <div class="insight"><div class="title">Total Tenants</div><div class="value">2</div></div>
+          <div class="insight"><div class="title">Total Store Rooms</div><div class="value">2</div></div>
+          <div class="insight"><div class="title">Active Rental Years</div><div class="value">2025</div></div>
+          <div class="insight"><div class="title">Outstanding Rent (approx)</div><div class="value">GHS 0</div></div>
+          <div class="insight"><div class="title">Average Rent per Year</div><div class="value">GHS 2800</div></div>
+          <div class="insight"><div class="title">Top Paying Tenant</div><div class="value">HAJIA BINTU</div></div>
+          <div class="insight"><div class="title">Most Rented Store Room</div><div class="value">STORE ROOM C1</div></div>
+          <div class="insight"><div class="title">Upcoming Renewals (60 days)</div><div class="value">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:12px">
+      <div class="card">
+        <h3 style="margin-top:0">Yearly Income</h3>
+        <canvas id="yearBar" width="1352" height="240" style="width:100%;height:240px"></canvas>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Store Room Income Distribution</h3>
+        <canvas id="propPieChart" width="664" height="240" style="width:100%;height:240px"></canvas>
+        <div style="height:12px"></div>
+        <h4 style="margin:6px 0 8px 0">Yearly Collection Progress</h4>
+        <div style="background:#111;border-radius:8px;padding:8px">
+          <div id="progressBar" style="height:18px;border-radius:6px;background:#222;overflow:hidden">
+            <div id="progressFill" style="width: 100%; height: 100%; background: var(--gold);"></div>
+          </div>
+          <div class="small" id="progressText" style="margin-top:6px;color:var(--muted)">100% of expected collected (1 years considered)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal (Receipt) -->
+<div id="modal" class="modal-backdrop" role="dialog" aria-hidden="true">
+  <div class="modal" role="document" aria-labelledby="modalTitle">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;gap:12px;align-items:center">
+        <svg width="48" height="48" viewBox="0 0 100 100"><rect x="2" y="2" width="96" height="96" rx="12" fill="#b88f2a"></rect><text x="50" y="62" text-anchor="middle" font-size="32" font-family="sans-serif" fill="#0b0b0c" font-weight="700">IG</text></svg>
+        <div>
+          <div style="font-weight:800">IGODYE RENTALS</div>
+          <div class="small muted" id="modalBizContact">123 Gold Street, Accra • +233 55 000 0000 • info@igodyerentals.com</div>
+        </div>
+      </div>
+      <div>
+        <button class="btn" id="modalClose">Close</button>
+      </div>
+    </div>
+
+    <div class="modal-body" id="modalBody"></div>
+
+    <div class="modal-actions">
+      <button class="btn" id="downloadPdfBtn">Download as PDF</button>
+      <button class="btn primary" id="printBtn">Print Receipt</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* --------------------- Helpers & storage --------------------- */
+const KEY = { P:'ig_props_final2', T:'ig_tenants_final2', PAY:'ig_payments_final2', BIZ:'ig_business_final2' };
+const uid = ()=>Math.random().toString(36).slice(2,9);
+function load(k,fallback){ try{ const r = localStorage.getItem(k); return r? JSON.parse(r): fallback }catch(e){ return fallback } }
+function save(k,v){ localStorage.setItem(k, JSON.stringify(v)) }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function escCsv(s){ if(s==null) return ''; s=String(s); if(s.includes(',')||s.includes('\n')||s.includes('"')) return '"' + s.replace(/"/g,'""') + '"'; return s; }
+
+/* --------------------- Seed data --------------------- */
+if(!localStorage.getItem(KEY.BIZ)){
+  save(KEY.BIZ, { name:'IGODYE Rentals', address:'123 Gold Street, Accra', phone:'+233 55 000 0000', email:'info@igodyerentals.com' });
+}
+if(!localStorage.getItem(KEY.P)){
+  const props = [
+    {id:'p1', name:'Store Room A1', address:'Block A, Gold Market', rent:1500},
+    {id:'p2', name:'Store Room B2', address:'Block B, Gold Market', rent:1800},
+    {id:'p3', name:'Store Room C3', address:'Block C, Gold Market', rent:2200}
+  ];
+  const tenants = [
+    {id:'t1', name:'Kojo Mensah', phone:'0244000000', email:'kojo@example.com', propertyId:'p1', leaseStart:'2024-01-01', leaseEnd:'2024-12-31'},
+    {id:'t2', name:'Ama Owusu', phone:'0244111111', email:'ama@example.com', propertyId:'p2', leaseStart:'2025-01-01', leaseEnd:'2025-12-31'}
+  ];
+  const payments = [
+    {id:uid(), tenantId:'t1', propertyId:'p1', amount:1500, year:2024, date:'2024-02-10', method:'Mobile', rentStart:'2024-01-01', rentEnd:'2024-12-31', yearsRented:1},
+    {id:uid(), tenantId:'t1', propertyId:'p1', amount:1500, year:2025, date:'2025-02-12', method:'Mobile', rentStart:'2025-01-01', rentEnd:'2025-12-31', yearsRented:1},
+    {id:uid(), tenantId:'t2', propertyId:'p2', amount:1800, year:2025, date:'2025-03-05', method:'Bank', rentStart:'2025-01-01', rentEnd:'2025-12-31', yearsRented:1}
+  ];
+  save(KEY.P, props); save(KEY.T, tenants); save(KEY.PAY, payments);
+}
+
+/* --------------------- App state & DOM --------------------- */
+let state = { view: (location.hash? location.hash.replace('#','') : 'dashboard') };
+const navButtons = document.querySelectorAll('#nav button');
+const appContent = document.getElementById('appContent');
+const bizSummary = document.getElementById('bizSummary');
+const bizContact = document.getElementById('bizContact');
+const sidebar = document.getElementById('sidebar');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const modal = document.getElementById('modal');
+const modalBody = document.getElementById('modalBody');
+const modalClose = document.getElementById('modalClose');
+const printBtn = document.getElementById('printBtn');
+const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+
+/* --------------------- Navigation & mobile menu --------------------- */
+navButtons.forEach(b => b.addEventListener('click', ()=> navigate(b.dataset.view)));
+function navigate(view){ state.view = view; location.hash = view; closeSidebarIfMobile(); render(); }
+window.addEventListener('hashchange', ()=> { const v = location.hash.replace('#',''); if(v) navigate(v); });
+
+hamburgerBtn.addEventListener('click', ()=> { sidebar.classList.toggle('open'); });
+function closeSidebarIfMobile(){ if(window.innerWidth <= 1000) sidebar.classList.remove('open'); }
+
+document.getElementById('topExportBtn').addEventListener('click', ()=> exportPaymentsCSV(true)); // export all by default
+document.getElementById('topAddPaymentBtn').addEventListener('click', ()=> navigate('payments'));
+
+/* --------------------- Modal --------------------- */
+modalClose.addEventListener('click', hideModal);
+modal.addEventListener('click', (e)=> { if(e.target === modal) hideModal(); });
+function showModal(html){
+  modalBody.innerHTML = html;
+  const biz = load(KEY.BIZ, {}); const mb = document.getElementById('modalBizContact'); if(mb) mb.textContent = `${biz.address||''} • ${biz.phone||''} • ${biz.email||''}`;
+  modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false'); modalBody.scrollTop = 0;
+}
+function hideModal(){ modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); }
+
+/* --------------------- Router render --------------------- */
+function render(){
+  const biz = load(KEY.BIZ, {});
+  bizSummary.textContent = biz.address || '';
+  bizContact.textContent = `${biz.phone || ''} • ${biz.email || ''}`;
+  navButtons.forEach(b => b.classList.toggle('active', b.dataset.view === state.view));
+  if(state.view === 'dashboard') renderDashboard();
+  else if(state.view === 'properties') renderProperties();
+  else if(state.view === 'tenants') renderTenants();
+  else if(state.view === 'payments') renderPaymentsPage();
+  else if(state.view === 'reports') renderReports();
+  else if(state.view === 'settings') renderSettings();
+  else if(state.view === 'contact') renderContact();
+  else appContent.innerHTML = '<div class="card">Not found</div>';
+}
+
+/* --------------------- DASHBOARD --------------------- */
+function renderDashboard(){
+  const props = load(KEY.P, []), tenants = load(KEY.T, []), payments = load(KEY.PAY, []);
+  const totalCollected = payments.reduce((s,p)=>s + Number(p.amount||0), 0);
+  const perYear = {}; payments.forEach(p => perYear[p.year] = (perYear[p.year]||0) + Number(p.amount||0));
+  const years = Object.keys(perYear).map(Number).sort((a,b)=>a-b);
+  const activeYears = years.length ? years.join(', ') : (new Date()).getFullYear();
+  const expected = props.reduce((s,p)=> s + (Number(p.rent||0) * (years.length || 1)), 0);
+  const outstanding = Math.max(0, expected - totalCollected);
+  const avgRentPerYear = years.length ? Math.round(totalCollected / years.length) : totalCollected;
+
+  const tenantTotals = {};
+  payments.forEach(p => { tenantTotals[p.tenantId] = (tenantTotals[p.tenantId] || 0) + Number(p.amount||0); });
+  const tenantsArr = load(KEY.T, []);
+  const topTenantId = Object.keys(tenantTotals).sort((a,b)=>tenantTotals[b]-tenantTotals[a])[0] || null;
+  const topTenantName = tenantsArr.find(t=>t.id===topTenantId)?.name || (topTenantId ? topTenantId : '—');
+
+  const propCounts = {};
+  payments.forEach(p => { propCounts[p.propertyId] = (propCounts[p.propertyId] || 0) + 1; });
+  const propsArr = load(KEY.P, []);
+  const topPropId = Object.keys(propCounts).sort((a,b)=>propCounts[b]-propCounts[a])[0] || null;
+  const topPropName = propsArr.find(p=>p.id===topPropId)?.name || (topPropId ? topPropId : '—');
+
+  const upcomingRenewals = (function(){
+    const now = new Date(); const threshold = new Date(now.getTime() + 1000*60*60*24*60);
+    const tenantsAll = load(KEY.T, []);
+    return tenantsAll.filter(t => t.leaseEnd).filter(t => {
+      const d = new Date(t.leaseEnd);
+      return d >= now && d <= threshold;
+    }).length;
+  })();
+
+  appContent.innerHTML = `
+    <div style="margin-bottom:12px">
+      <div class="insights-wrapper">
+        <div class="insights">
+          <div class="insight"><div class="title">Total Rent Collected</div><div class="value">GHS ${totalCollected}</div></div>
+          <div class="insight"><div class="title">Total Tenants</div><div class="value">${tenantsArr.length}</div></div>
+          <div class="insight"><div class="title">Total Store Rooms</div><div class="value">${propsArr.length}</div></div>
+          <div class="insight"><div class="title">Active Rental Years</div><div class="value">${esc(activeYears)}</div></div>
+          <div class="insight"><div class="title">Outstanding Rent (approx)</div><div class="value">GHS ${outstanding}</div></div>
+          <div class="insight"><div class="title">Average Rent per Year</div><div class="value">GHS ${avgRentPerYear}</div></div>
+          <div class="insight"><div class="title">Top Paying Tenant</div><div class="value">${esc(topTenantName)}</div></div>
+          <div class="insight"><div class="title">Most Rented Store Room</div><div class="value">${esc(topPropName)}</div></div>
+          <div class="insight"><div class="title">Upcoming Renewals (60 days)</div><div class="value">${upcomingRenewals}</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:12px">
+      <div class="card">
+        <h3 style="margin-top:0">Yearly Income</h3>
+        <canvas id="yearBar" width="700" height="220" style="width:100%;height:240px"></canvas>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Store Room Income Distribution</h3>
+        <canvas id="propPieChart" width="400" height="220" style="width:100%;height:240px"></canvas>
+        <div style="height:12px"></div>
+        <h4 style="margin:6px 0 8px 0">Yearly Collection Progress</h4>
+        <div style="background:#111;border-radius:8px;padding:8px">
+          <div id="progressBar" style="height:18px;border-radius:6px;background:#222;overflow:hidden">
+            <div id="progressFill" style="width:0%;height:100%;background:var(--gold)"></div>
+          </div>
+          <div class="small" id="progressText" style="margin-top:6px;color:var(--muted)">0% collected</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  drawBarChart(document.getElementById('yearBar'), years.map(String), years.map(y=>perYear[y]||0));
+  const propTotals = propsArr.map(p => ({ name:p.name, total: payments.filter(x=>x.propertyId===p.id).reduce((a,b)=>a+Number(b.amount||0),0) }));
+  drawPieChart(document.getElementById('propPieChart'), propTotals.map(x=>x.name), propTotals.map(x=>x.total));
+  const percent = expected > 0 ? Math.round((totalCollected/expected)*100) : 0;
+  const fill = document.getElementById('progressFill'); if(fill) fill.style.width = Math.min(100, percent) + '%';
+  const pt = document.getElementById('progressText'); if(pt) pt.textContent = `${Math.min(100,percent)}% of expected collected (${years.length || 1} years considered)`;
+}
+
+/* --------------------- PROPERTIES --------------------- */
+function renderProperties(){
+  const props = load(KEY.P, []);
+  appContent.innerHTML = `
+    <div class="card">
+      <h3 style="margin-top:0">Add Store Room</h3>
+      <div style="margin-top:8px"><input id="propName" placeholder="Name (e.g. Store Room A1)"></div>
+      <div style="margin-top:8px"><input id="propAddress" placeholder="Address"></div>
+      <div style="margin-top:8px" class="form-row"><input id="propRent" placeholder="Annual Rent (GHS)" type="number"></div>
+      <div style="margin-top:8px"><button class="btn primary" id="addPropBtn">Add Store Room</button></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="card">
+      <h3 style="margin-top:0">Store Room List</h3>
+      <div id="propList"></div>
+    </div>
+  `;
+  function renderList(){
+    const el = document.getElementById('propList'); el.innerHTML = props.map(p=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);margin-bottom:8px">
+        <div><div style="font-weight:700">${esc(p.name)}</div><div class="small" style="color:var(--muted)">${esc(p.address)}</div></div>
+        <div style="text-align:right"><div>GHS ${p.rent}</div><div style="margin-top:6px"><button class="btn" data-edit="${p.id}">Edit</button> <button class="btn" data-del="${p.id}">Delete</button></div></div>
+      </div>
+    `).join('');
+  }
+  renderList();
+  document.getElementById('addPropBtn').addEventListener('click', ()=>{
+    const name = document.getElementById('propName').value.trim();
+    const address = document.getElementById('propAddress').value.trim();
+    const rent = Number(document.getElementById('propRent').value);
+    if(!name || !rent){ alert('Name and annual rent required'); return; }
+    props.push({id:uid(), name, address, rent}); save(KEY.P, props); render();
+  });
+  document.getElementById('propList').addEventListener('click', (e)=>{
+    const id = e.target.dataset.del || e.target.dataset.edit; if(!id) return;
+    if(e.target.dataset.del){ if(confirm('Delete store room?')){ const idx = props.findIndex(x=>x.id===id); if(idx>-1) props.splice(idx,1); save(KEY.P, props); const tenants = load(KEY.T, []); tenants.forEach(t=>{ if(t.propertyId===id) t.propertyId=''; }); save(KEY.T, tenants); render(); } }
+    else { const p = props.find(x=>x.id===id); const newRent = prompt('New annual rent', p.rent); if(newRent){ p.rent = Number(newRent); save(KEY.P, props); render(); } }
+  });
+}
+
+/* --------------------- TENANTS --------------------- */
+function renderTenants(){
+  const tenants = load(KEY.T, []); const props = load(KEY.P, []);
+  appContent.innerHTML = `
+    <div class="card">
+      <h3 style="margin-top:0">Add Tenant</h3>
+      <div style="margin-top:8px"><input id="tenName" placeholder="Name"></div>
+      <div style="margin-top:8px"><input id="tenPhone" placeholder="Phone"></div>
+      <div style="margin-top:8px"><input id="tenEmail" placeholder="Email"></div>
+      <div style="margin-top:8px"><select id="tenProp"><option value="">Select store room</option>${props.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></div>
+      <div style="margin-top:8px" class="form-row"><input id="tenStart" type="date"><input id="tenEnd" type="date"></div>
+      <div style="margin-top:8px"><button class="btn primary" id="addTenBtn">Add Tenant</button></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="card"><h3 style="margin-top:0">Tenant List</h3><div id="tenList"></div></div>
+  `;
+  function renderList(){
+    const el = document.getElementById('tenList'); el.innerHTML = tenants.map(t=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);margin-bottom:8px">
+        <div><div style="font-weight:700">${esc(t.name)}</div><div class="small" style="color:var(--muted)">${esc(t.phone)} • ${esc(t.email)}</div><div class="small" style="color:var(--muted)">Lease: ${esc(t.leaseStart||'-')} → ${esc(t.leaseEnd||'-')}</div></div>
+        <div><button class="btn" data-edit="${t.id}">Edit</button> <button class="btn" data-del="${t.id}">Delete</button></div>
+      </div>
+    `).join('');
+  }
+  renderList();
+  document.getElementById('addTenBtn').addEventListener('click', ()=>{
+    const name = document.getElementById('tenName').value.trim();
+    const phone = document.getElementById('tenPhone').value.trim();
+    const email = document.getElementById('tenEmail').value.trim();
+    const propertyId = document.getElementById('tenProp').value;
+    const leaseStart = document.getElementById('tenStart').value;
+    const leaseEnd = document.getElementById('tenEnd').value;
+    if(!name || !propertyId){ alert('Name and store room required'); return; }
+    tenants.push({id:uid(), name, phone, email, propertyId, leaseStart, leaseEnd}); save(KEY.T, tenants); render();
+  });
+  document.getElementById('tenList').addEventListener('click', (e)=>{
+    const id = e.target.dataset.del || e.target.dataset.edit; if(!id) return;
+    if(e.target.dataset.del){ if(confirm('Delete tenant?')){ let arr = load(KEY.T, []); arr = arr.filter(x=>x.id!==id); save(KEY.T, arr); render(); } }
+    else { let arr = load(KEY.T, []); const t = arr.find(x=>x.id===id); const newPhone = prompt('Phone', t.phone); if(newPhone){ t.phone = newPhone; save(KEY.T, arr); render(); } }
+  });
+}
+
+/* --------------------- PAYMENTS (with filters) --------------------- */
+function renderPaymentsPage(){
+  appContent.innerHTML = `
+    <div class="card">
+      <h3 style="margin-top:0">Record Yearly Payment</h3>
+      <div style="margin-top:8px"><select id="payTenant"><option value="">Select tenant</option></select></div>
+      <div style="margin-top:8px"><select id="payProp"><option value="">Select store room</option></select></div>
+      <div style="margin-top:8px" class="form-row"><input id="payAmount" placeholder="Amount (GHS)" type="number"><input id="payYear" placeholder="Year (e.g. 2025)" type="number"></div>
+      <div style="margin-top:8px" class="form-row"><input id="payDate" placeholder="Payment Date" type="date"><input id="payMethod" placeholder="Method" list="methods" /></div>
+      <datalist id="methods"><option>Mobile</option><option>Bank</option><option>Cash</option></datalist>
+      <div style="margin-top:8px" class="form-row"><input id="rentStart" type="date" placeholder="Rent Start"><input id="rentEnd" type="date" placeholder="Rent End"></div>
+      <div style="margin-top:8px"><input id="yearsRented" placeholder="Number of Years Rented" type="number"></div>
+      <div style="margin-top:8px"><button class="btn primary" id="addPayBtn">Save Payment</button> <button class="btn" id="exportCSVBtn">Export Payments to CSV</button></div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Payments</h3>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <div style="min-width:160px"><select id="filterYear"><option value="">Filter by Year (All)</option></select></div>
+        <div style="min-width:200px"><select id="filterProp"><option value="">Filter by Store Room (All)</option></select></div>
+        <div style="margin-left:auto;display:flex;gap:8px"><button class="btn" id="clearFiltersBtn">Clear Filters</button><button class="btn" id="exportFilteredCSVBtn">Export Filtered CSV</button></div>
+      </div>
+
+      <div id="paymentsList"></div>
+
+      <div style="height:12px"></div>
+
+      <div class="card" id="paymentsChartCard" style="margin-top:12px">
+        <h4 style="margin-top:0">Payments Chart (Filtered)</h4>
+        <canvas id="paymentsChart" width="700" height="220" style="width:100%;height:220px"></canvas>
+      </div>
+
+    </div>
+  `;
+
+  populateTenantAndPropertySelects();
+  populateFilterControls();
+  renderPaymentsList();
+
+  document.getElementById('addPayBtn').addEventListener('click', ()=> {
+    const tenantId = document.getElementById('payTenant').value;
+    const propertyId = document.getElementById('payProp').value;
+    const amount = Number(document.getElementById('payAmount').value);
+    const year = Number(document.getElementById('payYear').value);
+    const date = document.getElementById('payDate').value || (new Date()).toISOString().split('T')[0];
+    const method = document.getElementById('payMethod').value || 'Mobile';
+    const rentStart = document.getElementById('rentStart').value;
+    const rentEnd = document.getElementById('rentEnd').value;
+    const yearsRented = Number(document.getElementById('yearsRented').value) || 1;
+
+    if(!tenantId || !propertyId || !amount || !year){ alert('Select tenant, store room, amount and year'); return; }
+    if(year < 1900 || year > 3000){ alert('Enter a valid year'); return; }
+    const tenants = load(KEY.T, []), props = load(KEY.P, []);
+    const tenant = tenants.find(t=>t.id===tenantId), prop = props.find(p=>p.id===propertyId);
+    const payments = load(KEY.PAY, []);
+    payments.push({ id: uid(), tenantId, propertyId, amount, year, date, method, rentStart, rentEnd, yearsRented, tenantName: tenant?.name, propertyName: prop?.name });
+    save(KEY.PAY, payments);
+    populateFilterControls(); // update filters
+    render();
+  });
+
+  document.getElementById('exportCSVBtn').addEventListener('click', ()=> exportPaymentsCSV(true));
+  document.getElementById('exportFilteredCSVBtn').addEventListener('click', ()=> exportPaymentsCSV(false));
+  document.getElementById('clearFiltersBtn').addEventListener('click', ()=> { document.getElementById('filterYear').value=''; document.getElementById('filterProp').value=''; renderPaymentsList(); drawPaymentsFilteredChart(); });
+
+  document.getElementById('filterYear').addEventListener('change', ()=> { renderPaymentsList(); drawPaymentsFilteredChart(); });
+  document.getElementById('filterProp').addEventListener('change', ()=> { renderPaymentsList(); drawPaymentsFilteredChart(); });
+
+  function populateTenantAndPropertySelects(){
+    const tenants = load(KEY.T, []), props = load(KEY.P, []);
+    document.getElementById('payTenant').innerHTML = '<option value="">Select tenant</option>' + tenants.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
+    document.getElementById('payProp').innerHTML = '<option value="">Select store room</option>' + props.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  }
+
+  function populateFilterControls(){
+    const payments = load(KEY.PAY, []), props = load(KEY.P, []);
+    const years = Array.from(new Set(payments.map(p=>p.year))).sort((a,b)=>a-b);
+    const fy = document.getElementById('filterYear');
+    fy.innerHTML = '<option value="">Filter by Year (All)</option>' + years.map(y=>`<option value="${y}">${y}</option>`).join('');
+    const fp = document.getElementById('filterProp');
+    fp.innerHTML = '<option value="">Filter by Store Room (All)</option>' + props.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  }
+
+  function renderPaymentsList(){
+    const payments = load(KEY.PAY, []).slice().reverse();
+    const tenants = load(KEY.T, []), props = load(KEY.P, []);
+    const fy = document.getElementById('filterYear').value;
+    const fp = document.getElementById('filterProp').value;
+    const filtered = payments.filter(p => (fy ? String(p.year) === String(fy) : true) && (fp ? p.propertyId === fp : true));
+    const el = document.getElementById('paymentsList');
+    if(filtered.length === 0){ el.innerHTML = '<div class="small">No payments found for selected filters</div>'; drawPaymentsFilteredChart(); return; }
+    el.innerHTML = filtered.map(p=>{
+      const tenant = (tenants.find(t=>t.id===p.tenantId) || {name:p.tenantName || p.tenantId}).name;
+      const prop = (props.find(x=>x.id===p.propertyId) || {name:p.propertyName || p.propertyId}).name;
+      return `<div style="display:flex;flex-direction:column;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:700">${esc(tenant)}</div>
+          <div>GHS ${p.amount}</div>
+        </div>
+        <div class="small" style="color:var(--muted);margin-top:6px">Year: ${p.year} • Date: ${esc(p.date)} • ${esc(p.method)} • ${esc(prop)}</div>
+        <div class="small" style="color:var(--muted);margin-top:6px">Rent: ${esc(p.rentStart||'')} → ${esc(p.rentEnd||'')} • Years: ${p.yearsRented || 1}</div>
+        <div style="margin-top:8px;display:flex;gap:8px"><button class="btn" data-print="${p.id}">View Receipt</button><button class="btn" data-del="${p.id}">Delete</button></div>
+      </div>`;
+    }).join('');
+    el.querySelectorAll('button[data-del]').forEach(btn => btn.addEventListener('click', (e)=> {
+      const id = e.target.dataset.del;
+      if(confirm('Delete payment?')){ let arr = load(KEY.PAY, []); arr = arr.filter(x=>x.id !== id); save(KEY.PAY, arr); populateFilterControls(); render(); }
+    }));
+    el.querySelectorAll('button[data-print]').forEach(btn => btn.addEventListener('click', (e)=> openReceiptPopup(e.target.dataset.print) ));
+    drawPaymentsFilteredChart();
+  }
+
+  // initial chart draw
+  function drawPaymentsFilteredChart(){
+    const payments = load(KEY.PAY, []);
+    const fy = document.getElementById('filterYear').value;
+    const fp = document.getElementById('filterProp').value;
+    const filtered = payments.filter(p => (fy ? String(p.year) === String(fy) : true) && (fp ? p.propertyId === fp : true));
+    // group by year (or by tenant if you prefer)
+    const totals = {};
+    filtered.forEach(p => totals[p.year] = (totals[p.year] || 0) + Number(p.amount||0));
+    const years = Object.keys(totals).map(Number).sort((a,b)=>a-b);
+    const labels = years.length ? years.map(String) : ['No Data'];
+    const values = years.length ? years.map(y => totals[y] || 0) : [0];
+    drawBarChart(document.getElementById('paymentsChart'), labels, values);
+  }
+}
+
+/* --------------------- REPORTS --------------------- */
+function renderReports(){
+  const payments = load(KEY.PAY, []), props = load(KEY.P, []);
+  const totalsPerYear = {}; payments.forEach(p => totalsPerYear[p.year] = (totalsPerYear[p.year]||0) + Number(p.amount||0));
+  const years = Object.keys(totalsPerYear).map(Number).sort((a,b)=>a-b);
+  const defaultYear = years.length ? years[years.length-1] : (new Date()).getFullYear();
+
+  appContent.innerHTML = `
+    <div class="grid-2">
+      <div class="card"><h3 style="margin-top:0">Yearly Income (All Years)</h3><canvas id="yearlyChart" width="400" height="220" style="width:100%;height:200px"></canvas></div>
+      <div class="card"><h3 style="margin-top:0">Store Room Distribution for Year</h3>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <select id="reportYearSelect">${years.map(y=>`<option value="${y}" ${y===defaultYear? 'selected':''}>${y}</option>`).join('')}</select>
+          <button class="btn" id="refreshReportsBtn">Refresh</button>
+        </div>
+        <canvas id="propPieChart" width="400" height="220" style="width:100%;height:200px"></canvas>
+      </div>
+    </div>
+  `;
+
+  drawBarChart(document.getElementById('yearlyChart'), years.map(String), years.map(y => totalsPerYear[y] || 0));
+
+  function drawForSel(){
+    const sel = document.getElementById('reportYearSelect'); const y = Number(sel.value);
+    const paymentsForYear = load(KEY.PAY, []).filter(p => p.year === y);
+    const propTotals = load(KEY.P, []).map(p => ({ name: p.name, total: paymentsForYear.filter(x=>x.propertyId===p.id).reduce((a,b)=>a+Number(b.amount||0),0) }));
+    drawPieChart(document.getElementById('propPieChart'), propTotals.map(x=>x.name), propTotals.map(x=>x.total));
+  }
+  drawForSel();
+  document.getElementById('refreshReportsBtn').addEventListener('click', drawForSel);
+}
+
+/* --------------------- SETTINGS --------------------- */
+function renderSettings(){
+  const biz = load(KEY.BIZ, {});
+  appContent.innerHTML = `
+    <div class="card">
+      <h3 style="margin-top:0">Business Settings</h3>
+      <div style="margin-top:8px"><input id="bizName" placeholder="Business name" value="${esc(biz.name||'')}"></div>
+      <div style="margin-top:8px"><input id="bizAddress" placeholder="Address" value="${esc(biz.address||'')}"></div>
+      <div style="margin-top:8px" class="form-row"><input id="bizPhone" placeholder="Phone" value="${esc(biz.phone||'')}"><input id="bizEmail" placeholder="Email" value="${esc(biz.email||'')}"></div>
+      <div style="margin-top:8px"><button class="btn primary" id="saveBizBtn">Save</button></div>
+    </div>
+  `;
+  document.getElementById('saveBizBtn').addEventListener('click', ()=> {
+    const name = document.getElementById('bizName').value.trim();
+    const address = document.getElementById('bizAddress').value.trim();
+    const phone = document.getElementById('bizPhone').value.trim();
+    const email = document.getElementById('bizEmail').value.trim();
+    save(KEY.BIZ, { name, address, phone, email }); alert('Business info saved'); render();
+  });
+}
+
+/* --------------------- CONTACT --------------------- */
+function renderContact(){
+  const biz = load(KEY.BIZ, {});
+  appContent.innerHTML = `<div class="card"><h3 style="margin-top:0">Contact & Support</h3><p class="small">For support contact ${esc(biz.name||'IGODYE Rentals')} at ${esc(biz.email||'')} or ${esc(biz.phone||'')}.</p></div>`;
+}
+
+/* --------------------- CSV Export (all or filtered) --------------------- */
+function exportPaymentsCSV(all = true){
+  const payments = load(KEY.PAY, []);
+  const tenants = load(KEY.T, []);
+  const properties = load(KEY.P, []);
+  let toExport = payments;
+  if(!all){
+    // use filters if available
+    const fy = document.getElementById('filterYear') ? document.getElementById('filterYear').value : '';
+    const fp = document.getElementById('filterProp') ? document.getElementById('filterProp').value : '';
+    toExport = payments.filter(p => (fy ? String(p.year) === String(fy) : true) && (fp ? p.propertyId === fp : true));
+  }
+  if(toExport.length === 0){ alert('No payments to export'); return; }
+  let csv = 'ReceiptNo,Tenant,StoreRoom,Amount,Year,PaymentDate,RentStart,RentEnd,YearsRented,Method\n';
+  toExport.forEach(p => {
+    const r = 'REC-' + Math.floor(1000 + Math.random()*9000);
+    const tenant = (tenants.find(t=>t.id===p.tenantId) || {name:p.tenantName||p.tenantId}).name;
+    const prop = (properties.find(x=>x.id===p.propertyId) || {name:p.propertyName||p.propertyId}).name;
+    csv += `${r},${escCsv(tenant)},${escCsv(prop)},${p.amount},${p.year || ''},${p.date || ''},${p.rentStart || ''},${p.rentEnd || ''},${p.yearsRented || ''},${escCsv(p.method || '')}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = all ? 'IGODYE_Rentals_Payments_All.csv' : 'IGODYE_Rentals_Payments_Filtered.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+/* --------------------- Receipt: view, print, download (html2canvas + jsPDF) --------------------- */
+function openReceiptPopup(paymentId){
+  const payments = load(KEY.PAY, []), tenants = load(KEY.T, []), props = load(KEY.P, []), biz = load(KEY.BIZ, {});
+  const p = payments.find(x=>x.id === paymentId); if(!p){ alert('Payment not found'); return; }
+  const tenant = tenants.find(t=>t.id===p.tenantId) || {name:p.tenantName || ''};
+  const prop = props.find(x=>x.id===p.propertyId) || {name:p.propertyName || ''};
+  const recNo = 'REC-' + Math.floor(1000 + Math.random()*9000);
+
+  // Modal preview (luxury dark)
+  const modalHtml = `
+    <div class="receipt-preview">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
+        <div>
+          <h2 style="margin:0">${esc(biz.name||'IGODYE Rentals')}</h2>
+          <div class="small" style="color:var(--gold)">${esc(biz.address||'')}</div>
+          <div class="small" style="color:var(--gold)">${esc(biz.phone||'')} • ${esc(biz.email||'')}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-weight:700;color:var(--gold)">Receipt</div>
+          <div style="margin-top:8px">No: <span style="color:#fff">${recNo}</span></div>
+          <div>Year: <span style="color:#fff">${p.year}</span></div>
+          <div>Date: <span style="color:#fff">${esc(p.date||'')}</span></div>
+        </div>
+      </div>
+
+      <hr style="border:none;border-top:1px solid rgba(184,143,42,0.12);margin:12px 0">
+
+      <div style="font-size:15px;color:var(--gold)"><strong style="color:var(--gold)">Tenant:</strong> <span style="color:#fff">${esc(tenant.name)}</span></div>
+      <div style="font-size:15px;color:var(--gold)"><strong style="color:var(--gold)">Store Room:</strong> <span style="color:#fff">${esc(prop.name)}</span></div>
+      <div style="font-size:15px;color:var(--gold)"><strong style="color:var(--gold)">Amount Paid:</strong> <span style="color:#fff">GHS ${p.amount}</span></div>
+      <div style="font-size:14px;color:var(--gold)"><strong style="color:var(--gold)">Payment Method:</strong> <span style="color:#fff">${esc(p.method||'')}</span></div>
+
+      <div style="margin-top:8px;font-size:14px;color:var(--gold)"><strong style="color:var(--gold)">Rent Period:</strong> <span style="color:#fff">${esc(p.rentStart||'')} → ${esc(p.rentEnd||'')}</span></div>
+      <div style="font-size:14px;color:var(--gold)"><strong style="color:var(--gold)">Years Rented:</strong> <span style="color:#fff">${p.yearsRented||1}</span></div>
+
+      <div style="margin-top:22px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:700;color:var(--gold)">Paid in Full</div>
+          <div class="small" style="color:var(--muted)">This receipt confirms payment for the year shown.</div>
+        </div>
+        <div style="text-align:center">
+          <div style="margin-bottom:28px; color:var(--gold)">__________________________</div>
+          <div class="small" style="color:rgba(184,143,42,0.9)">Authorized Signature</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  showModal(modalHtml);
+
+  // Build printable white receipt HTML with deep-black bold labels
+  const printableHtml = buildPrintableHtmlForPrinting(biz, {
+    recNo, year: p.year, date: p.date||'', tenantName: tenant.name||'', storeRoomName: prop.name||'', amount: p.amount, method: p.method||'', rentStart: p.rentStart||'', rentEnd: p.rentEnd||'', yearsRented: p.yearsRented||1
+  });
+
+  // Print via iframe
+  printBtn.onclick = ()=> iframePrint(printableHtml);
+  // Download as PDF: use html2canvas + jsPDF (dynamically load libs when needed)
+  downloadPdfBtn.onclick = async ()=> {
+    try {
+      await ensureHtml2CanvasAndJSPdf();
+      // create element to capture
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = printableHtml;
+      document.body.appendChild(wrapper);
+      // find the receipt element (in this printable html it's the .receipt)
+      const receiptEl = wrapper.querySelector('.receipt') || wrapper;
+      // use html2canvas to capture
+      const canvas = await html2canvas(receiptEl, { scale: 2 });
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const pdf = new jsPDF('p', 'pt', 'a4');
+      // calculate fit
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pageWidth - 40; // margins
+      const ratio = canvas.width / canvas.height;
+      const imgHeight = imgWidth / ratio;
+      let y = 30;
+      pdf.addImage(imgData, 'JPEG', 20, y, imgWidth, imgHeight);
+      // if height exceeds page, add pages (simple split)
+      let remainingHeight = imgHeight;
+      while (imgHeight > pageHeight - 60) {
+        // if content longer than one page: break into more pages (rare for simple receipts)
+        pdf.addPage();
+        y = 30;
+        remainingHeight -= (pageHeight - 60);
+        // not slicing image here for simplicity (most receipts fit one page)
+        break;
+      }
+      pdf.save(`${esc(biz.name||'receipt')}_REC_${esc(String(recNo))}.pdf`);
+      document.body.removeChild(wrapper);
+    } catch(err){
+      alert('PDF export failed: ' + (err.message || err));
+    }
+  };
+}
+
+// Generate printable HTML string (white background, gold border, deep-black labels & bold)
+function buildPrintableHtmlForPrinting(biz, data){
+  const style = `
+    <style>
+      :root{--gold:#b88f2a}
+      body{margin:0;font-family:Georgia, 'Times New Roman', serif;background:#fff;color:#000}
+      .page{padding:22px}
+      .receipt{border:8px solid var(--gold);padding:20px;border-radius:8px;background:#fff;color:#000;max-width:720px;margin:0 auto}
+      .header{display:flex;justify-content:space-between;align-items:flex-start}
+      .biz{color:var(--gold);font-weight:800;font-size:20px}
+      .muted{color:#333;font-size:12px}
+      .label{font-weight:700;color:#000;margin-top:8px}
+      .value{color:#000}
+      .signature{margin-top:36px;text-align:right;color:var(--gold)}
+    </style>
+  `;
+  const html = `
+    <!doctype html><html><head><meta charset="utf-8"><title>Receipt - ${esc(biz.name||'IGODYE Rentals')}</title>${style}</head><body>
+      <div class="page"><div class="receipt printable">
+        <div class="header">
+          <div>
+            <div class="biz">${esc(biz.name||'IGODYE Rentals')}</div>
+            <div class="muted">${esc(biz.address||'')}</div>
+            <div class="muted">${esc(biz.phone||'')} • ${esc(biz.email||'')}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:700;color:var(--gold)">RECEIPT</div>
+            <div style="margin-top:8px"><div class="label">No:</div><div class="value">${esc(data.recNo)}</div></div>
+            <div><div class="label">Year:</div><div class="value">${esc(String(data.year))}</div></div>
+            <div><div class="label">Date:</div><div class="value">${esc(data.date)}</div></div>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid rgba(0,0,0,0.08);margin:12px 0">
+
+        <div class="label">Tenant:</div><div class="value">${esc(data.tenantName)}</div>
+        <div class="label">Store Room:</div><div class="value">${esc(data.storeRoomName)}</div>
+        <div class="label">Amount Paid:</div><div class="value">GHS ${esc(String(data.amount))}</div>
+        <div class="label">Payment Method:</div><div class="value">${esc(data.method)}</div>
+
+        <div class="label">Rent Period:</div><div class="value">${esc(data.rentStart)} → ${esc(data.rentEnd)}</div>
+        <div class="label">Number of Years Rented:</div><div class="value">${esc(String(data.yearsRented))}</div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-weight:700;color:var(--gold)">Paid in Full</div><div class="muted">This receipt confirms payment for the year shown.</div></div>
+          <div class="signature"><div>__________________________</div><div style="font-size:12px;color:#333;margin-top:6px">Authorized Signature</div></div>
+        </div>
+      </div></div>
+    </body></html>
+  `;
+  return html;
+}
+
+/* iframe print helper */
+function iframePrint(htmlContent){
+  try {
+    const iframe = document.createElement('iframe');
+    iframe.style.position='fixed'; iframe.style.right='0'; iframe.style.bottom='0'; iframe.style.width='0'; iframe.style.height='0'; iframe.style.border='0';
+    document.body.appendChild(iframe);
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(htmlContent);
+    iframe.contentWindow.document.close();
+    setTimeout(()=> {
+      try {
+        iframe.contentWindow.focus();
+        setTimeout(()=> { try { iframe.contentWindow.print(); } catch(e){ console.error('Print failed', e); alert('Print failed: ' + (e.message||e)); } setTimeout(()=>{ try{ document.body.removeChild(iframe); }catch(e){} }, 600); }, 250);
+      } catch(err){ console.error('Focus error', err); try{ document.body.removeChild(iframe);}catch(e){} }
+    }, 350);
+  } catch(e){ alert('Printing failed: ' + e.message); }
+}
+
+/* Dynamically load html2canvas + jsPDF only when needed for PDF */
+let html2canvasPromise = null, jsPDFPromise = null;
+function ensureHtml2CanvasAndJSPdf(){
+  if(window.html2canvas && window.jspdf) return Promise.resolve();
+  const promises = [];
+  if(!window.html2canvas){
+    if(!html2canvasPromise){
+      html2canvasPromise = new Promise((res,rej)=>{
+        const s = document.createElement('script');
+        s.onload = ()=> res();
+        s.onerror = ()=> rej(new Error('Failed to load html2canvas'));
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        document.head.appendChild(s);
+      });
+    }
+    promises.push(html2canvasPromise);
+  }
+  if(!window.jspdf){
+    if(!jsPDFPromise){
+      jsPDFPromise = new Promise((res,rej)=>{
+        const s = document.createElement('script');
+        s.onload = ()=> {
+          // also create a small alias
+          window.jsPDF = window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : window.jspdf;
+          res();
+        };
+        s.onerror = ()=> rej(new Error('Failed to load jsPDF'));
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        document.head.appendChild(s);
+      });
+    }
+    promises.push(jsPDFPromise);
+  }
+  return Promise.all(promises);
+}
+
+/* --------------------- Charts (canvas) --------------------- */
+function drawBarChart(canvas, labels, values){
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const ratio = window.devicePixelRatio || 1;
+  const w = canvas.offsetWidth * ratio, h = canvas.offsetHeight * ratio;
+  canvas.width = w; canvas.height = h;
+  ctx.clearRect(0,0,w,h);
+  const padding = 30*ratio, chartW = w - padding*2, chartH = h - padding*2;
+  const max = Math.max(1, ...values), barW = chartW / Math.max(1, labels.length) * 0.6;
+  ctx.fillStyle = 'rgba(0,0,0,0.03)'; ctx.fillRect(padding, padding, chartW, chartH);
+  labels.forEach((lab,i)=>{ const val = values[i] || 0; const x = padding + (i + 0.2) * (chartW / labels.length); const barH = (val / max) * (chartH - 20); const y = padding + (chartH - barH); ctx.fillStyle = '#b88f2a'; ctx.fillRect(x,y,barW,barH); ctx.fillStyle = '#111'; ctx.font = `${11*ratio}px sans-serif`; ctx.fillText('GHS '+val, x, y - 6*ratio); ctx.save(); ctx.translate(x + barW/2, padding + chartH + 12*ratio); ctx.textAlign = 'center'; ctx.fillText(String(lab), 0, 0); ctx.restore(); });
+}
+function drawPieChart(canvas, labels, values){
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const ratio = window.devicePixelRatio || 1;
+  const w = canvas.offsetWidth * ratio, h = canvas.offsetHeight * ratio;
+  canvas.width = w; canvas.height = h;
+  ctx.clearRect(0,0,w,h);
+  const cx = w/2, cy = h/2, radius = Math.min(w,h)/3, total = values.reduce((a,b)=>a+b,0) || 1; let start = -Math.PI/2;
+  const colors = ['#b88f2a','#0ea5a4','#f59e0b','#60a5fa','#ef4444','#a78bfa','#34d399','#fb7185'];
+  labels.forEach((lab,i)=>{ const slice = (values[i]||0)/total; const end = start + slice*Math.PI*2; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,radius,start,end); ctx.closePath(); ctx.fillStyle = colors[i % colors.length]; ctx.fill(); const mid = (start+end)/2; const lx = cx + Math.cos(mid)*(radius+20); const ly = cy + Math.sin(mid)*(radius+20); ctx.fillStyle = '#000'; ctx.font = `${11*ratio}px sans-serif`; const percent = Math.round(slice*100) + '%'; ctx.fillText(`${lab} (${percent})`, lx - 40*ratio, ly); start = end; });
+}
+
+/* --------------------- Initial boot --------------------- */
+if(!location.hash) location.hash = state.view;
+render();
+window.render = render;
+</script>
+
+
+</body></html>
